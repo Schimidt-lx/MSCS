@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.WokerDataMapper">
+    
+    <resultMap type="WokerData" id="WokerDataResult">
+        <result property="UserID"    column="UserID"    />
+        <result property="password"    column="password"    />
+        <result property="name"    column="name"    />
+        <result property="sex"    column="sex"    />
+        <result property="phonenumber"    column="phonenumber"    />
+        <result property="post"    column="post"    />
+        <result property="jurisdiction"    column="jurisdiction"    />
+    </resultMap>
+
+    <sql id="selectWokerDataVo">
+        select UserID, password, name, sex, phonenumber, post, jurisdiction from WokerData
+    </sql>
+
+    <select id="selectWokerDataList" parameterType="WokerData" resultMap="WokerDataResult">
+        <include refid="selectWokerDataVo"/>
+        <where>  
+            <if test="UserID != null  and UserID != ''"> and UserID = #{UserID}</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="phonenumber != null  and phonenumber != ''"> and phonenumber = #{phonenumber}</if>
+            <if test="post != null  and post != ''"> and post = #{post}</if>
+            <if test="jurisdiction != null  and jurisdiction != ''"> and jurisdiction = #{jurisdiction}</if>
+        </where>
+    </select>
+    
+    <select id="selectWokerDataById" parameterType="String" resultMap="WokerDataResult">
+        <include refid="selectWokerDataVo"/>
+        where UserID = #{UserID}
+    </select>
+        
+    <insert id="insertWokerData" parameterType="WokerData">
+        insert into WokerData
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="UserID != null">UserID,</if>
+            <if test="password != null and password != ''">password,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sex != null and sex != ''">sex,</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
+            <if test="post != null and post != ''">post,</if>
+            <if test="jurisdiction != null and jurisdiction != ''">jurisdiction,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="UserID != null">#{UserID},</if>
+            <if test="password != null and password != ''">#{password},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sex != null and sex != ''">#{sex},</if>
+            <if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
+            <if test="post != null and post != ''">#{post},</if>
+            <if test="jurisdiction != null and jurisdiction != ''">#{jurisdiction},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWokerData" parameterType="WokerData">
+        update WokerData
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="password != null and password != ''">password = #{password},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sex != null and sex != ''">sex = #{sex},</if>
+            <if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
+            <if test="post != null and post != ''">post = #{post},</if>
+            <if test="jurisdiction != null and jurisdiction != ''">jurisdiction = #{jurisdiction},</if>
+        </trim>
+        where UserID = #{UserID}
+    </update>
+
+    <delete id="deleteWokerDataById" parameterType="String">
+        delete from WokerData where UserID = #{UserID}
+    </delete>
+
+    <delete id="deleteWokerDataByIds" parameterType="String">
+        delete from WokerData where UserID in 
+        <foreach item="UserID" collection="array" open="(" separator="," close=")">
+            #{UserID}
+        </foreach>
+    </delete>
+
+</mapper>

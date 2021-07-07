@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.On Sale ProductMapper">
+    
+    <resultMap type="On Sale Product" id="On Sale ProductResult">
+        <result property="PID"    column="PID"    />
+        <result property="Pname"    column="Pname"    />
+        <result property="Pprice"    column="Pprice"    />
+        <result property="Pnum2"    column="Pnum2"    />
+        <result property="sale volume"    column="sale volume"    />
+    </resultMap>
+
+    <sql id="selectOn Sale ProductVo">
+        select PID, Pname, Pprice, Pnum2, sale volume from On Sale Product
+    </sql>
+
+    <select id="selectOn Sale ProductList" parameterType="On Sale Product" resultMap="On Sale ProductResult">
+        <include refid="selectOn Sale ProductVo"/>
+        <where>  
+            <if test="PID != null  and PID != ''"> and PID = #{PID}</if>
+            <if test="Pname != null  and Pname != ''"> and Pname like concat('%', #{Pname}, '%')</if>
+            <if test="Pprice != null "> and Pprice = #{Pprice}</if>
+            <if test="Pnum2 != null "> and Pnum2 = #{Pnum2}</if>
+            <if test="sale volume != null "> and sale volume = #{sale volume}</if>
+        </where>
+    </select>
+    
+    <select id="selectOn Sale ProductById" parameterType="String" resultMap="On Sale ProductResult">
+        <include refid="selectOn Sale ProductVo"/>
+        where PID = #{PID}
+    </select>
+        
+    <insert id="insertOn Sale Product" parameterType="On Sale Product">
+        insert into On Sale Product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="PID != null">PID,</if>
+            <if test="Pname != null and Pname != ''">Pname,</if>
+            <if test="Pprice != null">Pprice,</if>
+            <if test="Pnum2 != null">Pnum2,</if>
+            <if test="sale volume != null">sale volume,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="PID != null">#{PID},</if>
+            <if test="Pname != null and Pname != ''">#{Pname},</if>
+            <if test="Pprice != null">#{Pprice},</if>
+            <if test="Pnum2 != null">#{Pnum2},</if>
+            <if test="sale volume != null">#{sale volume},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOn Sale Product" parameterType="On Sale Product">
+        update On Sale Product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="Pname != null and Pname != ''">Pname = #{Pname},</if>
+            <if test="Pprice != null">Pprice = #{Pprice},</if>
+            <if test="Pnum2 != null">Pnum2 = #{Pnum2},</if>
+            <if test="sale volume != null">sale volume = #{sale volume},</if>
+        </trim>
+        where PID = #{PID}
+    </update>
+
+    <delete id="deleteOn Sale ProductById" parameterType="String">
+        delete from On Sale Product where PID = #{PID}
+    </delete>
+
+    <delete id="deleteOn Sale ProductByIds" parameterType="String">
+        delete from On Sale Product where PID in 
+        <foreach item="PID" collection="array" open="(" separator="," close=")">
+            #{PID}
+        </foreach>
+    </delete>
+
+</mapper>
