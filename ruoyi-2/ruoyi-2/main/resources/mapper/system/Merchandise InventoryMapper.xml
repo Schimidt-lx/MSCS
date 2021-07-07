@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.Merchandise InventoryMapper">
+    
+    <resultMap type="Merchandise Inventory" id="Merchandise InventoryResult">
+        <result property="ID"    column="ID"    />
+        <result property="name"    column="name"    />
+        <result property="gID"    column="gID"    />
+        <result property="num"    column="num"    />
+    </resultMap>
+
+    <sql id="selectMerchandise InventoryVo">
+        select ID, name, gID, num from Merchandise Inventory
+    </sql>
+
+    <select id="selectMerchandise InventoryList" parameterType="Merchandise Inventory" resultMap="Merchandise InventoryResult">
+        <include refid="selectMerchandise InventoryVo"/>
+        <where>  
+            <if test="ID != null  and ID != ''"> and ID = #{ID}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="gID != null  and gID != ''"> and gID = #{gID}</if>
+            <if test="num != null "> and num = #{num}</if>
+        </where>
+    </select>
+    
+    <select id="selectMerchandise InventoryById" parameterType="String" resultMap="Merchandise InventoryResult">
+        <include refid="selectMerchandise InventoryVo"/>
+        where ID = #{ID}
+    </select>
+        
+    <insert id="insertMerchandise Inventory" parameterType="Merchandise Inventory">
+        insert into Merchandise Inventory
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">ID,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="gID != null and gID != ''">gID,</if>
+            <if test="num != null">num,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ID != null">#{ID},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="gID != null and gID != ''">#{gID},</if>
+            <if test="num != null">#{num},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMerchandise Inventory" parameterType="Merchandise Inventory">
+        update Merchandise Inventory
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="gID != null and gID != ''">gID = #{gID},</if>
+            <if test="num != null">num = #{num},</if>
+        </trim>
+        where ID = #{ID}
+    </update>
+
+    <delete id="deleteMerchandise InventoryById" parameterType="String">
+        delete from Merchandise Inventory where ID = #{ID}
+    </delete>
+
+    <delete id="deleteMerchandise InventoryByIds" parameterType="String">
+        delete from Merchandise Inventory where ID in 
+        <foreach item="ID" collection="array" open="(" separator="," close=")">
+            #{ID}
+        </foreach>
+    </delete>
+
+</mapper>

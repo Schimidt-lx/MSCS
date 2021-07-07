@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.IncomeMapper">
+    
+    <resultMap type="Income" id="IncomeResult">
+        <result property="ID"    column="ID"    />
+        <result property="pID"    column="pID"    />
+        <result property="name"    column="name"    />
+        <result property="sID"    column="sID"    />
+        <result property="time"    column="time"    />
+        <result property="price"    column="price"    />
+        <result property="number"    column="number"    />
+        <result property="person"    column="person"    />
+    </resultMap>
+
+    <sql id="selectIncomeVo">
+        select ID, pID, name, sID, time, price, number, person from Income
+    </sql>
+
+    <select id="selectIncomeList" parameterType="Income" resultMap="IncomeResult">
+        <include refid="selectIncomeVo"/>
+        <where>  
+            <if test="ID != null  and ID != ''"> and ID = #{ID}</if>
+            <if test="pID != null  and pID != ''"> and pID = #{pID}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="sID != null  and sID != ''"> and sID = #{sID}</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="price != null  and price != ''"> and price = #{price}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="person != null  and person != ''"> and person = #{person}</if>
+        </where>
+    </select>
+    
+    <select id="selectIncomeById" parameterType="String" resultMap="IncomeResult">
+        <include refid="selectIncomeVo"/>
+        where ID = #{ID}
+    </select>
+        
+    <insert id="insertIncome" parameterType="Income">
+        insert into Income
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ID != null">ID,</if>
+            <if test="pID != null and pID != ''">pID,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="sID != null and sID != ''">sID,</if>
+            <if test="time != null">time,</if>
+            <if test="price != null and price != ''">price,</if>
+            <if test="number != null">number,</if>
+            <if test="person != null and person != ''">person,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ID != null">#{ID},</if>
+            <if test="pID != null and pID != ''">#{pID},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="sID != null and sID != ''">#{sID},</if>
+            <if test="time != null">#{time},</if>
+            <if test="price != null and price != ''">#{price},</if>
+            <if test="number != null">#{number},</if>
+            <if test="person != null and person != ''">#{person},</if>
+         </trim>
+    </insert>
+
+    <update id="updateIncome" parameterType="Income">
+        update Income
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pID != null and pID != ''">pID = #{pID},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="sID != null and sID != ''">sID = #{sID},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="price != null and price != ''">price = #{price},</if>
+            <if test="number != null">number = #{number},</if>
+            <if test="person != null and person != ''">person = #{person},</if>
+        </trim>
+        where ID = #{ID}
+    </update>
+
+    <delete id="deleteIncomeById" parameterType="String">
+        delete from Income where ID = #{ID}
+    </delete>
+
+    <delete id="deleteIncomeByIds" parameterType="String">
+        delete from Income where ID in 
+        <foreach item="ID" collection="array" open="(" separator="," close=")">
+            #{ID}
+        </foreach>
+    </delete>
+
+</mapper>
